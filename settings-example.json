@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "payload=$(cat); type=$(echo \"$payload\" | jq -r .notification_type); msg=$(echo \"$payload\" | jq -r .message); if [ \"$type\" = \"permission_prompt\" ]; then terminal-notifier -title 'Claude Code' -subtitle 'Permission Required' -message \"$msg\" -timeout 10 -sound default -execute ~/.claude/scripts/focus-terminal.sh; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
