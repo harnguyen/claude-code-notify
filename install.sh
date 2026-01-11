@@ -74,25 +74,20 @@ if [ ! -f "$SETTINGS_FILE" ]; then
 EOF
     echo -e "${GREEN}✓ Created ~/.claude/settings.json${NC}"
 else
-    echo -e "${YELLOW}~/.claude/settings.json already exists.${NC}"
-    echo ""
-    echo "Add this to your hooks section manually:"
-    echo ""
-    cat << 'EOF'
-"hooks": {
-  "Notification": [
-    {
-      "hooks": [
-        {
-          "type": "command",
-          "command": "payload=$(cat); type=$(echo \"$payload\" | jq -r .notification_type); msg=$(echo \"$payload\" | jq -r .message); if [ \"$type\" = \"permission_prompt\" ]; then terminal-notifier -title 'Claude Code' -subtitle 'Permission Required' -message \"$msg\" -timeout 10 -sound default -execute ~/.claude/scripts/focus-terminal.sh; fi"
-        }
-      ]
-    }
-  ]
-}
-EOF
-    echo ""
+    echo -e "${YELLOW}~/.claude/settings.json already exists. Merging hooks...${NC}"
+    
+    # Define the notification hook
+    NOTIFICATION_HOOK='[{"hooks":[{"type":"command","command":"payload=$(cat); type=$(echo \"$payload\" | jq -r .notification_type); msg=$(echo \"$payload\" | jq -r .message); if [ \"$type\" = \"permission_prompt\" ]; then terminal-notifier -title '\''Claude Code'\'' -subtitle '\''Permission Required'\'' -message \"$msg\" -timeout 10 -sound default -execute ~/.claude/scripts/focus-terminal.sh; fi"}]}]'
+    
+    # Check if Notification hook already exists
+    if jq -e '.hooks.Notification' "$SETTINGS_FILE" > /dev/null 2>&1; then
+        echo -e "${YELLOW}⚠ Notification hook already exists. Skipping to avoid duplicates.${NC}"
+    else
+        # Merge the notification hook into existing settings
+        TEMP_FILE=$(mktemp)
+        jq --argjson hook "$NOTIFICATION_HOOK" '.hooks.Notification = $hook' "$SETTINGS_FILE" > "$TEMP_FILE" && mv "$TEMP_FILE" "$SETTINGS_FILE"
+        echo -e "${GREEN}✓ Added Notification hook to ~/.claude/settings.json${NC}"
+    fi
 fi
 
 # Test notification
