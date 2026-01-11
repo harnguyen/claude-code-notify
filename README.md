@@ -1,7 +1,6 @@
 # Claude Code Notify
 
 Clickable macOS notifications for Claude Code permission prompts. When Claude Code needs permission, you get a notification that **clicks to focus the terminal**.
-
 ![Demo](demo.gif)
 
 ## Features
