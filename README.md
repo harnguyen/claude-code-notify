@@ -36,7 +36,7 @@ Or manually:
 
 ```bash
 # Clone the repo
-git clone https://github.com/YOUR_USERNAME/claude-code-notify.git
+git clone https://github.com/harnguyen/claude-code-notify.git
 cd claude-code-notify
 
 # Run installer
