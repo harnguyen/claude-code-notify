@@ -29,7 +29,7 @@ brew install terminal-notifier jq
 ### 2. Run the install script
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/claude-code-notify/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/harnguyen/claude-code-notify/main/install.sh | bash
 ```
 
 Or manually:
